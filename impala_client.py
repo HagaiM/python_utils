@@ -68,7 +68,7 @@ class ImpalaClient:
         ImpalaClient._instance = None
 
 # if __name__ == "__main__":
-#     TABLE_NAME = 'process_machine_discrete_measurements_fact_data_science'
+#     TABLE_NAME = ''
 #     QUERY = ''
 #     host_name = ''
 #     data_object = ImpalaClient(host_name)
