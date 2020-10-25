@@ -5,7 +5,7 @@ import glob
 from multiprocessing import Pool
 from distutils.dir_util import copy_tree
 
-from postgresql_client import df_to_postgresql_bulk
+
 
 # wrap your csv importer in a function that can be mapped
 
@@ -14,6 +14,7 @@ class CSV_Loader:
         self.files_to_load_path = files_to_load_path
         self.loaded_files_path = loaded_files_path
         self.failure_files_path = failure_files_path
+
 
 
     def read_csv(self, filename):
@@ -27,12 +28,13 @@ class CSV_Loader:
 
 
 
+
     def delete_files_from_folder(self, folder, file_extention):
         filelist = [f for f in os.listdir(folder) if f.endswith(file_extention)]
         for f in filelist:
             os.remove(os.path.join(folder, f))
 
-    def main(self):
+    def retrieve_df(self):
         success = 0
         copy = 0
         # get a list of file names
@@ -52,10 +54,9 @@ class CSV_Loader:
                 else:
                     pass
 
-                #insert data into postgresql: here you can add try except for loggin
+
                 try:
                     if isinstance(combined_df, pd.DataFrame):
-                        df_to_postgresql_bulk(combined_df, 'test', 'localhost', 'postgres', 'postgres', 'postgres', type='append')
                         success = 1
                     else:
                         pass
@@ -82,9 +83,11 @@ class CSV_Loader:
         else:
             print("No Files")
             # insert log here TODO
+        return combined_df
 if __name__ == '__main__':
-    files_to_load_path = "C:/to_load_files/"
-    loaded_files_path = "C:/loaded_files/"
-    failure_files_path = "C:/failure_files/"
+    files_to_load_path = "C:/Projects/Frontline/clustring/to_load_files/"
+    loaded_files_path = "C:/Projects/Frontline/clustring/loaded_files/"
+    failure_files_path = "C:/Projects/Frontline/clustring/failure_files/"
     csv_tran = CSV_Loader(files_to_load_path, loaded_files_path, failure_files_path)
-    csv_tran.main()
+    df = csv_tran.retrieve_df()
+    print(df.head(5))
