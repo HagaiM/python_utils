@@ -119,7 +119,6 @@ def read_query(host, user, passwd, db, query):
     return df
 
 def df_to_mysql_bulk(df,dest_table,host, user, passwd, db,type = 'append'):
-    df = df[1:]
     sh = df.shape[0]
     bulk_number = 50000
     reminder = sh % bulk_number
